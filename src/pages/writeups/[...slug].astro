@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writeups', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={`${post.data.title} // trishul`} description={post.data.description}>
+  <a class="back" href="/">← ~/writeups</a>
+
+  <header class="post-head">
+    <h1>{post.data.title}</h1>
+    <div class="post-meta">
+      <span>{fmt(post.data.date)}</span>
+      {post.data.platform && <span class="platform">{post.data.platform}</span>}
+    </div>
+    <div class="post-tags">
+      {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+    </div>
+  </header>
+
+  <article class="prose">
+    <Content />
+  </article>
+</BaseLayout>

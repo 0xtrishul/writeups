@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('writeups', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="trishul // writeups">
+  <header class="masthead">
+    <div class="prompt">
+      <span class="u">trishul@mahadev</span>:<span class="path">~/writeups</span>$ ls -lt
+    </div>
+    <nav class="nav">
+      <a href="/" aria-current="page">index</a>
+      <a href="https://trishul.re">home</a>
+      <a href="https://github.com/mah4dev">github</a>
+      <a href="/rss.xml">rss</a>
+    </nav>
+  </header>
+
+  <p class="tagline">// {posts.length} {posts.length === 1 ? 'entry' : 'entries'} — chained bugs, dropped shells, notes from the lab</p>
+
+  <section>
+    {
+      posts.map((post) => (
+        <a class="entry" href={`/writeups/${post.id}/`}>
+          <div class="row">
+            <span class="date">{fmt(post.data.date)}</span>
+            <span class="title">{post.data.title}</span>
+          </div>
+          <p class="desc indent">{post.data.description}</p>
+          <div class="tags indent">
+            {post.data.tags.map((t) => (
+              <span class="tag">{t}</span>
+            ))}
+          </div>
+        </a>
+      ))
+    }
+  </section>
+</BaseLayout>
