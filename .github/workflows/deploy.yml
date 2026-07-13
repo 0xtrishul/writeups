@@ -1,0 +1,43 @@
+name: Deploy Astro site to Pages
+
+on:
+  # run on every push to the default branch
+  push:
+    branches: [main]
+  # allow manual runs from the Actions tab
+  workflow_dispatch:
+
+# permissions the deploy needs
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# only one deploy at a time; don't cancel an in-progress run
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install, build, and upload
+        uses: withastro/action@v4
+        # if your project ever lives in a subfolder, set:
+        # with:
+        #   path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
