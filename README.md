@@ -43,7 +43,7 @@ match, the build fails with a clear error (that's the point).
    Astro deploy workflow (`withastro/action`), or build and push `dist/` to a
    `gh-pages` branch.
 3. `public/CNAME` already contains `writeups.trishul.re` — it ships in the build.
-4. In Cloudflare, add a `CNAME` record `writeups` → `mah4dev.github.io`, and keep
+4. In Cloudflare, add a `CNAME` record `writeups` → `0xtrishul.github.io`, and keep
    SSL/TLS mode on **Full** (Flexible causes redirect loops in front of Pages).
 
 ## Structure
