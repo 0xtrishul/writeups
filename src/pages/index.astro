@@ -2,11 +2,48 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const posts = (await getCollection('writeups', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const all = await getCollection('writeups', ({ data }) => !data.draft);
 
 const fmt = (d: Date) => d.toISOString().slice(0, 10);
+
+type Post = (typeof all)[number];
+type Item =
+  | { kind: 'post'; date: Date; post: Post }
+  | { kind: 'series'; date: Date; name: string; parts: Post[] };
+
+// standalone posts pass through as-is
+const standalone = all.filter((p) => !p.data.series);
+
+// series posts get bucketed by their `series` slug
+const buckets = new Map<string, Post[]>();
+for (const p of all) {
+  if (!p.data.series) continue;
+  const arr = buckets.get(p.data.series) ?? [];
+  arr.push(p);
+  buckets.set(p.data.series, arr);
+}
+
+const items: Item[] = [];
+
+for (const post of standalone) {
+  items.push({ kind: 'post', date: post.data.date, post });
+}
+
+for (const [name, parts] of buckets) {
+  parts.sort((a, b) => (a.data.part ?? 0) - (b.data.part ?? 0));
+  // a series slots into the timeline by its most recent part
+  const latest = parts.reduce(
+    (m, p) => (p.data.date > m ? p.data.date : m),
+    parts[0].data.date
+  );
+  items.push({ kind: 'series', date: latest, name, parts });
+}
+
+// newest first — a series moves up the list whenever a new part drops
+items.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+
+// count a whole series as one entry in the listing
+const entryCount = standalone.length + buckets.size;
 ---
 
 <BaseLayout title="trishul // writeups">
@@ -22,24 +59,49 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
     </nav>
   </header>
 
-  <p class="tagline">// {posts.length} {posts.length === 1 ? 'entry' : 'entries'} — chained bugs, dropped shells, notes from the lab</p>
+  <p class="tagline">// {entryCount} {entryCount === 1 ? 'entry' : 'entries'} — chained bugs, dropped shells, notes from the lab</p>
 
   <section>
     {
-      posts.map((post) => (
-        <a class="entry" href={`/writeups/${post.id}/`}>
-          <div class="row">
-            <span class="date">{fmt(post.data.date)}</span>
-            <span class="title">{post.data.title}</span>
-          </div>
-          <p class="desc indent">{post.data.description}</p>
-          <div class="tags indent">
-            {post.data.tags.map((t) => (
-              <span class="tag">{t}</span>
-            ))}
-          </div>
-        </a>
-      ))
+      items.map((item) =>
+        item.kind === 'post' ? (
+          <a class="entry" href={`/writeups/${item.post.id}/`}>
+            <div class="row">
+              <span class="date">{fmt(item.post.data.date)}</span>
+              <span class="title">{item.post.data.title}</span>
+            </div>
+            <p class="desc indent">{item.post.data.description}</p>
+            <div class="tags indent">
+              {item.post.data.tags.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          </a>
+        ) : (
+          <details class="series">
+            <summary>
+              <div class="row">
+                <span class="date">{fmt(item.date)}</span>
+                <span class="dir">{item.name}/</span>
+                <span class="count">
+                  {item.parts.length} {item.parts.length === 1 ? 'part' : 'parts'}
+                </span>
+                <span class="caret" aria-hidden="true" />
+              </div>
+              <p class="desc indent">{item.parts[0].data.description}</p>
+            </summary>
+            <div class="series-parts indent">
+              {item.parts.map((p) => (
+                <a class="part" href={`/writeups/${p.id}/`}>
+                  <span class="pnum">{String(p.data.part ?? 0).padStart(2, '0')}</span>
+                  <span class="pdate">{fmt(p.data.date)}</span>
+                  <span class="ptitle">{p.data.title}</span>
+                </a>
+              ))}
+            </div>
+          </details>
+        )
+      )
     }
   </section>
 </BaseLayout>
