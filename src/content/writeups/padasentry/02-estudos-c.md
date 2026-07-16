@@ -153,7 +153,7 @@ O `szExeFile` é um `char[MAX_PATH]` — array de bytes, exatamente como o Zhirk
 
 ---
 
-Zhirkov deu o modelo mental que importa — memória como bytes, ponteiros como endereços, aritmética como soma de inteiros. A Win32 empilha um vocabulário em cima disso, muda a ABI, e adiciona algumas convenções que só fazem sentido com contexto histórico. A diferenca não é gritante, mas ignorá-lo é o tipo de coisa que te faz perder duas horas debugando um `dwSize` faltando hahah..
+Zhirkov deu o modelo mental que importa: memória como bytes, ponteiros como endereços, aritmética como soma de inteiros. A Win32 empilha um vocabulário em cima disso, muda a ABI, e adiciona algumas convenções que só fazem sentido com contexto histórico. A diferenca não é gritante, mas ignorá-lo é o tipo de coisa que te faz perder duas horas debugando um `dwSize` faltando hahah..
 
 Na parte 03 o estudo vai pro mecanismo que motivou o projeto inteiro — e a primeira descoberta real é que o hook mais famoso do Windows é deliberadamente invisível pro user space.
 

@@ -209,6 +209,6 @@ etapa 7 → memória unbacked                     2–3 dias
 
 ---
 
-Na próxima parte da série eu começo a estudar de verdade, e infelizmente, o primeiro tapa na cara chega antes do fim do primeiro dia... O mecanismo de hook mais documentado do Windows é justamente o que menos deixa rastro visível pro user space. O plano muda antes da primeira linha de detecção.
+Na próxima parte da série eu começo a estudar de verdade, revendo conceitos sobre C e aprendendo coisas sobre a Win32.
 
 `har har mahadev.`
