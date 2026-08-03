@@ -766,8 +766,6 @@ Eu configuro um webhook no meu localhost para entender o comportamento da aplica
 
 Como pode ser visto, ao acessar o link disponibilizado pelo appmon, sou redirecionado para uma página que exige um token de acesso. Sabendo disso, decido interceptar a requisição com o burp para facilitar o manuseio entre requests com o repeater.
 
-![alt text](images/token-required.png)
-
 Usando o Repeater e adicionando o header `Authorization` juntamente com o token, consigo ver que exibe uma mensagem de erro, através dessa mensagem, é possível identificar um axios rodando.
 
 ![alt text](images/error-axios.png)
