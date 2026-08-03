@@ -9,4 +9,8 @@ export default defineConfig({
       wrap: false,
     },
   },
+  image: {
+    layout: 'constrained',
+    responsiveStyles: true,
+  },
 });
