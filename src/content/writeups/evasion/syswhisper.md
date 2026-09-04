@@ -1,7 +1,7 @@
 ---
 title: "Syscalls, SysWhisper e mecanismos de detecção contra este tipo de tecnica"
 description: "Este artigo explora o funcionamento interno das syscalls no Windows demonstrando o fluxo via LSTAR e KiServiceTable até a calling convention x64. Alem disso, apresenta as técnicas de evasão baseadas nelas: direct e indirect syscalls com SysWhispers (v1, v2 e v3), egghunter e jitter randomizer. Na sequência, apresenta como os EDRs detectam essas técnicas (hooks no ntdll, checagem de return address, instrumentation callbacks e ETW) e os bypasses clássicos documentados para cada camada."
-tags: ["Syscall", "CallingConvention", "SSDT","Stub", "Hooks", "SysWhisper", "ETW", "EDR", "Bypass"]
+tags: ["Syscall", "Hooks", "SysWhisper", "ETW", "EDR", "Bypass"]
 date: 2026-08-15
 draft: false
 ---
