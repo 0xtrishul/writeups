@@ -1,5 +1,5 @@
 ---
-title: "PadaSentry #02 — o hook que não dá pra ver"
+title: "PadaSentry #03 — o hook que não dá pra ver"
 description: "Etapa 1 do roadmap na prática: o primeiro tapa na cara chega cedo. WH_KEYBOARD_LL não é enumerável do user space, e boa parte dos keyloggers reais nem usa hook. O plano muda antes da primeira linha de detecção."
 date: 2026-07-16
 platform: "dev-log"
